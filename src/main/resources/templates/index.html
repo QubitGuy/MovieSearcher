@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fun movie facts</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+<nav>
+    <div class="navbar">
+        <div class="div-container">
+            <form class="form-container" th:action="@{/index}" method="get">
+                <input type="text" id="movieSearch" name="query" placeholder="Search a movie">
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="container" th:if="${movies != ''}">
+    <div class="content-container" th:each="movie : ${movies}"><tbody>
+        <p class="content-title" th:text="${movie.Title}"></p>
+        <img class="content-image" data-tool-tip="" th:if="${movie.Poster != ''}" th:src="@{${movie.Poster}}" />
+    </div>
+</div>
+</body>
+</html>
