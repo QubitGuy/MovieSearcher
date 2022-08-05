@@ -66,7 +66,7 @@ public class MovieImplementation implements MovieService {
                     ));
 
                     if (movieRepo.get(i).getPoster().contains("N/A")) {
-                        movieRepo.get(i).setPoster("");
+                        movieRepo.get(i).setPoster("/images/no-poster-found.jpg");
                     }
                 }
             }
