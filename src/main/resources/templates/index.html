@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Fun movie facts</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
 <nav>
@@ -16,12 +16,13 @@
         </div>
     </div>
 </nav>
-<div class="container" th:each="movie : ${movies}">
+<div class="container">
     <ul>
-        <li>
-            <div class="content-container">
-                <p class="content-title" th:text="${movie.Title}"></p>
+        <li th:each="movie : ${movies}">
+            <div class="content-container" >
+                <p class="content-text" th:text="${movie.Title}"></p>
                 <img class="content-image" data-tool-tip="" th:if="${movie.Poster != ''}" th:src="@{${movie.Poster}}" />
+                <p class="content-text" th:if="${movie.Type != ''}" th:text="${movie.Type}"></p>
                 <!-- <p class="content-countries" th:text="${movie.Country}"></p>>-->
             </div>
         </li>

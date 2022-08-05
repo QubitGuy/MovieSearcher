@@ -53,18 +53,21 @@ public class MovieImplementation implements MovieService {
                 movieRepo.add(new Movie("Mynd finnst ekki í gagnagrunni",
                         "", "", "", ""));
             } else {
-                JSONObject search = (JSONObject) array.get(0);
-                movieRepo.add(new Movie(
-                        (String) search.get("Title"),
-                        (String) search.get("Year"),
-                        (String) search.get("imdbID"),
-                        (String) search.get("Type"),
-                        (String) search.get("Poster")
-                ));
 
-                if (movieRepo.get(0).getPoster().contains("N/A")) {
-                    movieRepo.get(0).setPoster("");
-                    System.out.println("New poster: " + movieRepo.get(0).getPoster());
+                for (int i = 0; i < array.size(); i++ ) {
+
+                    JSONObject search = (JSONObject) array.get(i);
+                    movieRepo.add(new Movie(
+                            (String) search.get("Title"),
+                            (String) search.get("Year"),
+                            (String) search.get("imdbID"),
+                            (String) search.get("Type"),
+                            (String) search.get("Poster")
+                    ));
+
+                    if (movieRepo.get(i).getPoster().contains("N/A")) {
+                        movieRepo.get(i).setPoster("");
+                    }
                 }
             }
 
