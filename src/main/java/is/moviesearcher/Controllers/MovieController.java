@@ -1,7 +1,9 @@
 package is.moviesearcher.Controllers;
 
-import is.moviesearcher.Persistence.Movie;
-import is.moviesearcher.Service.MovieService;
+import is.moviesearcher.Persistence.IMDbMovie;
+import is.moviesearcher.Persistence.MDAMovie;
+import is.moviesearcher.Service.IMDbMovieService;
+import is.moviesearcher.Service.MDAMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,12 +15,23 @@ import java.util.List;
 @Controller
 public class MovieController {
 
-    private final MovieService movieService;
+    private final MDAMovieService MDAMovieService;
+
 
     @Autowired
-    public MovieController(MovieService movieService) {
-        this.movieService = movieService;
+    public MovieController(MDAMovieService MDAMovieService) {
+        this.MDAMovieService = MDAMovieService;
     }
+
+    //private final IMDbMovieService IMDbMovieService;
+
+    /*
+    @Autowired
+    public MovieController(is.moviesearcher.Service.IMDbMovieService imDbMovieService) {
+        this.IMDbMovieService = imDbMovieService;
+    }
+
+     */
 
     @RequestMapping("/")
     public String Home(){
@@ -31,10 +44,12 @@ public class MovieController {
                                                String query, Model model) {
         try {
 
-            List<Movie> movie = movieService.getMovieByTitle(query);
+            List<MDAMovie> MDAMovie = MDAMovieService.getMDAMovieByTitle(query);
 
-            System.out.println("");
-            model.addAttribute("movies", movie);
+            // List<IMDbMovie> IMDbMovie = IMDbMovieService.getIMDbMovieByID(query);
+
+            model.addAttribute("movies", MDAMovie);
+            //model.addAttribute("movies", IMDbMovie);
 
         } catch (Exception e) {
             e.printStackTrace();

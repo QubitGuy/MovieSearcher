@@ -3,7 +3,7 @@
 <html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Fun movie facts</title>
+    <title>Fun MDAMovie facts</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
     <div class="navbar">
         <div class="div-container">
             <form class="form-container" th:action="@{/index}" method="get">
-                <input type="text" id="movieSearch" name="query" placeholder="Search a movie">
+                <input type="text" id="movieSearch" name="query" placeholder="Search a Movie">
             </form>
         </div>
     </div>
@@ -23,9 +23,20 @@
                 <p class="content-text" th:text="${movie.Title}"></p>
                 <img class="content-image" data-tool-tip="" th:if="${movie.Poster != ''}" th:src="@{${movie.Poster}}" />
                 <p class="content-text" th:if="${movie.Type != ''}" th:text="${movie.Type}"></p>
-                <!-- <p class="content-countries" th:text="${movie.Country}"></p>>-->
+
             </div>
         </li>
+        <!--
+        <li th:each="movie : ${movies}">
+            <div class="content-container" >
+                <p class="content-text" th:text="${movie.title}"></p>
+                <img class="content-image" data-tool-tip="" th:if="${movie.image != ''}" th:src="@{${movie.image}}" />
+                <p class="content-text" th:if="${movie.description != ''}" th:text="${movie.description}"></p>
+
+            </div>
+        </li>
+        -->
+        <!-- <p class="content-countries" th:text="${MDAMovie.Country}"></p> -->
     </ul>
 </div>
 </body>

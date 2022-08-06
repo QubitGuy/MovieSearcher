@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties
-public class Movie {
+public class MDAMovie {
 
 
     private String Title;
@@ -15,13 +15,13 @@ public class Movie {
     private String Type;
     private String Poster;
 
-    private List<Movie> movie = new ArrayList<Movie>();
+    private List<MDAMovie> MDAMovie = new ArrayList<MDAMovie>();
 
-    public Movie() {
+    public MDAMovie() {
 
     }
 
-    public Movie(String title, String year, String imdbID, String type, String poster) {
+    public MDAMovie(String title, String year, String imdbID, String type, String poster) {
         this.Title = title;
         this.Year = year;
         this.imdbID = imdbID;
