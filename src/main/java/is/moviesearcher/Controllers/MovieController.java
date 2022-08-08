@@ -8,7 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class MovieController {
@@ -51,6 +55,8 @@ public class MovieController {
                                                String query, Model model) {
         try {
 
+
+
             /*
             List<MDAMovie> MDAMovie = MDAMovieService.getMDAMovieByTitle(query);
             model.addAttribute("movies", MDAMovie);
@@ -61,7 +67,11 @@ public class MovieController {
             model.addAttribute("movies", IMDbMovie);
              */
 
+
             List<NetflixMovie> netflixMovies = netflixMovieService.getNetflixMovieByTitle(query);
+
+
+
             model.addAttribute("movies", netflixMovies);
 
         } catch (Exception e) {

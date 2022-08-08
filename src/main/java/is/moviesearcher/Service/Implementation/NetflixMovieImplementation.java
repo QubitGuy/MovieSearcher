@@ -3,7 +3,6 @@ package is.moviesearcher.Service.Implementation;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
-import is.moviesearcher.Persistence.IMDbMovie;
 import is.moviesearcher.Persistence.NetflixMovie;
 import is.moviesearcher.Service.NetflixMovieService;
 import org.json.simple.JSONArray;
@@ -14,14 +13,17 @@ import org.springframework.stereotype.Service;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class NetflixMovieImplementation implements NetflixMovieService {
 
-    private List<NetflixMovie> netflixMovieRepoTemp = new ArrayList<>();
     private List<NetflixMovie> netflixMovieRepo = new ArrayList<>();
 
-    private final static String HOST = "https://unogs-unogs-v1.p.rapidapi.com/search/titles?title=";
+    private final List<NetflixMovie> netflixMovieRepoTemp = new ArrayList<>();
+
+    private final static String HOST = "https://unogs-unogs-v1.p.rapidapi.com/search/titles?order_by=title&title=";
     private final static String X_RAPIDAPI_KEY = "d9e00b2fc7msh738d1b591013f04p12ca9cjsn02836d7eb9d1";
     private final String X_RAPIDAPI_HOST = "unogs-unogs-v1.p.rapidapi.com";
 
@@ -29,11 +31,10 @@ public class NetflixMovieImplementation implements NetflixMovieService {
     public List<NetflixMovie> getNetflixMovieByTitle(String query) {
 
         try {
-            netflixMovieRepoTemp.clear();
             netflixMovieRepo.clear();
 
             String charset = "UTF-8";
-            String keyword = String.format("s=%s", URLEncoder.encode(query, charset));
+            String keyword = String.format("%s", URLEncoder.encode(query, charset));
             HttpResponse<JsonNode> httpResponse = Unirest.get(HOST + keyword)
                     .header("X-RapidAPI-Key", X_RAPIDAPI_KEY)
                     .header("X-RapidAPI-Host", X_RAPIDAPI_HOST)
@@ -61,7 +62,7 @@ public class NetflixMovieImplementation implements NetflixMovieService {
 
                     JSONObject search = (JSONObject) jsonArray.get(i);
 
-                    netflixMovieRepoTemp.add(new NetflixMovie(
+                    netflixMovieRepo.add(new NetflixMovie(
                             (String) search.get("title"),
                             (String) search.get("title_type"),
                             (Long) search.get("netflix_id"),
@@ -71,32 +72,46 @@ public class NetflixMovieImplementation implements NetflixMovieService {
                             (String) search.get("title_date")
                     ));
 
-                    if (netflixMovieRepoTemp.get(i).getPoster().isEmpty()) {
-                        netflixMovieRepoTemp.get(i).setPoster("/images/no-poster-found.jpg");
+                    if (netflixMovieRepo.get(i).getPoster().isEmpty()) {
+                        netflixMovieRepo.get(i).setPoster("/images/no-poster-found.jpg");
                     }
                 }
             }
 
-            for (int i = 0; i < netflixMovieRepoTemp.size(); i++) {
+            netflixMovieRepoTemp.clear();
+            for (int i = 0; i < netflixMovieRepo.size(); i++) {
 
-                String title = netflixMovieRepoTemp.get(i).getTitle().toUpperCase();
-                
-                if (title.contains(query.toUpperCase())) {
 
-                    netflixMovieRepo.add(netflixMovieRepoTemp.get(i));
-                    System.out.println("Titles containing 'query' entry: " + title);
+                String title = netflixMovieRepo.get(i).getTitle();
+                title = title.toLowerCase();
+
+                String sQ = query.toLowerCase();
+
+                boolean exists = title.contains(sQ);
+
+                if (exists) {
+                    netflixMovieRepoTemp.add(netflixMovieRepo.get(i));
+                    System.out.println("Contains method works");
+                    System.out.println("Movie title = " + netflixMovieRepo.get(i).getTitle());
 
                 }
+
+                Pattern pattern = Pattern.compile(query, Pattern.CASE_INSENSITIVE);
+                Matcher matcher = pattern.matcher(title);
+
+                boolean matchFound = matcher.find();
+                if (matchFound) System.out.println("Pattern-matcher works!");
+
+
             }
-
-            netflixMovieRepo.forEach(System.out::println);
-
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return netflixMovieRepo;
+
+
+        return netflixMovieRepoTemp;
     }
 
 
