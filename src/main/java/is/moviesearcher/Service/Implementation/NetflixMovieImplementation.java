@@ -80,23 +80,12 @@ public class NetflixMovieImplementation implements NetflixMovieService {
             for (int i = 0; i < netflixMovieRepoTemp.size(); i++) {
 
                 String title = netflixMovieRepoTemp.get(i).getTitle().toUpperCase();
-
-                /*
-                System.out.println("Query: " + query);
-                System.out.println("Title: " + title);
-                 */
-
+                
                 if (title.contains(query.toUpperCase())) {
-                    netflixMovieRepo.add(new NetflixMovie(
-                            netflixMovieRepoTemp.get(i).getTitle(),
-                            netflixMovieRepoTemp.get(i).getTitle_type(),
-                            netflixMovieRepoTemp.get(i).getNetflix_id(),
-                            netflixMovieRepoTemp.get(i).getSynopsis(),
-                            netflixMovieRepoTemp.get(i).getImdb_id(),
-                            netflixMovieRepoTemp.get(i).getPoster(),
-                            netflixMovieRepoTemp.get(i).getTitle_date()
-                    ));
+
+                    netflixMovieRepo.add(netflixMovieRepoTemp.get(i));
                     System.out.println("Titles containing 'query' entry: " + title);
+
                 }
             }
 
