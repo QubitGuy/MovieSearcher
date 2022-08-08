@@ -75,6 +75,4 @@ public class IMDbMovieImplementation implements IMDbMovieService {
         return IMDbMovieRepo;
     }
 
-    // public List<IMDbMovie> get
-
 }

@@ -18,6 +18,7 @@ import java.util.List;
 @Service
 public class NetflixMovieImplementation implements NetflixMovieService {
 
+    private List<NetflixMovie> netflixMovieRepoTemp = new ArrayList<>();
     private List<NetflixMovie> netflixMovieRepo = new ArrayList<>();
 
     private final static String HOST = "https://unogs-unogs-v1.p.rapidapi.com/search/titles?title=";
@@ -28,7 +29,9 @@ public class NetflixMovieImplementation implements NetflixMovieService {
     public List<NetflixMovie> getNetflixMovieByTitle(String query) {
 
         try {
+            netflixMovieRepoTemp.clear();
             netflixMovieRepo.clear();
+
             String charset = "UTF-8";
             String keyword = String.format("s=%s", URLEncoder.encode(query, charset));
             HttpResponse<JsonNode> httpResponse = Unirest.get(HOST + keyword)
@@ -37,7 +40,7 @@ public class NetflixMovieImplementation implements NetflixMovieService {
                     .asJson();
 
             int responseStatus = httpResponse.getStatus();
-            System.out.println("HTTP Response Code: " + responseStatus);
+            System.out.println("\nHTTP Response Code: " + responseStatus);
 
             // Serializing JSON data
             JSONParser parser = new JSONParser();
@@ -57,12 +60,8 @@ public class NetflixMovieImplementation implements NetflixMovieService {
                 for (int i = 0; i < jsonArray.size(); i++) {
 
                     JSONObject search = (JSONObject) jsonArray.get(i);
-                    String title = (String) search.get("title");
-                    if (title.contains(query)) {
-                        System.out.println("Titles containing 'query' entry: " + title);
-                    }
 
-                    netflixMovieRepo.add(new NetflixMovie(
+                    netflixMovieRepoTemp.add(new NetflixMovie(
                             (String) search.get("title"),
                             (String) search.get("title_type"),
                             (Long) search.get("netflix_id"),
@@ -72,12 +71,36 @@ public class NetflixMovieImplementation implements NetflixMovieService {
                             (String) search.get("title_date")
                     ));
 
-                    if (netflixMovieRepo.get(i).getPoster().isEmpty()) {
-                        netflixMovieRepo.get(i).setPoster("/images/no-poster-found.jpg");
+                    if (netflixMovieRepoTemp.get(i).getPoster().isEmpty()) {
+                        netflixMovieRepoTemp.get(i).setPoster("/images/no-poster-found.jpg");
                     }
                 }
             }
 
+            for (int i = 0; i < netflixMovieRepoTemp.size(); i++) {
+
+                String title = netflixMovieRepoTemp.get(i).getTitle().toUpperCase();
+
+                /*
+                System.out.println("Query: " + query);
+                System.out.println("Title: " + title);
+                 */
+
+                if (title.contains(query.toUpperCase())) {
+                    netflixMovieRepo.add(new NetflixMovie(
+                            netflixMovieRepoTemp.get(i).getTitle(),
+                            netflixMovieRepoTemp.get(i).getTitle_type(),
+                            netflixMovieRepoTemp.get(i).getNetflix_id(),
+                            netflixMovieRepoTemp.get(i).getSynopsis(),
+                            netflixMovieRepoTemp.get(i).getImdb_id(),
+                            netflixMovieRepoTemp.get(i).getPoster(),
+                            netflixMovieRepoTemp.get(i).getTitle_date()
+                    ));
+                    System.out.println("Titles containing 'query' entry: " + title);
+                }
+            }
+
+            netflixMovieRepo.forEach(System.out::println);
 
 
         } catch (Exception e) {
