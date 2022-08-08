@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
+
 <nav>
     <div class="navbar">
         <div class="div-container">
@@ -16,28 +17,37 @@
         </div>
     </div>
 </nav>
-<div class="container">
-    <ul>
-        <li th:each="movie : ${movies}">
-            <div class="content-container" >
-                <p class="content-text" th:text="${movie.Title}"></p>
-                <img class="content-image" data-tool-tip="" th:if="${movie.Poster != ''}" th:src="@{${movie.Poster}}" />
-                <p class="content-text" th:if="${movie.Type != ''}" th:text="${movie.Type}"></p>
 
-            </div>
-        </li>
-        <!--
-        <li th:each="movie : ${movies}">
-            <div class="content-container" >
-                <p class="content-text" th:text="${movie.title}"></p>
-                <img class="content-image" data-tool-tip="" th:if="${movie.image != ''}" th:src="@{${movie.image}}" />
-                <p class="content-text" th:if="${movie.description != ''}" th:text="${movie.description}"></p>
+<div class="grid">
+    <div class="col" th:each="movie : ${movies}">
+        <p class="content-text" th:text="${movie.title}">This is a title</p>
+        <img class="content-image" data-tool-tip="" th:if="${movie.poster != ''}" th:src="@{${movie.poster}}"/>
+        <p class="content-text" th:if="${movie.synopsis != ''}" th:text="${movie.synopsis}">This is a title below an image</p>
+    </div>
 
-            </div>
-        </li>
-        -->
-        <!-- <p class="content-countries" th:text="${MDAMovie.Country}"></p> -->
-    </ul>
 </div>
+
+<!--
+<ul>
+<li th:each="movie : ${movies}">
+    <div class="content-container" >
+        <p class="content-text" th:text="${movie.Title}"></p>
+        <img class="content-image" data-tool-tip="" th:if="${movie.Poster != ''}" th:src="@{${movie.Poster}}" />
+        <p class="content-text" th:if="${movie.Type != ''}" th:text="${movie.Type}"></p>
+
+    </div>
+</li>
+    <li th:each="movie : ${movies}">
+
+        <div class="content-container" >
+            <p class="content-text" th:text="${movie.title}"></p>
+            <img class="content-image" data-tool-tip="" th:if="${movie.image != ''}" th:src="@{${movie.image}}" />
+            <p class="content-text" th:if="${movie.description != ''}" th:text="${movie.description}"></p>
+        </div>
+
+    </li>
+</ul>
+-->
+
 </body>
 </html>

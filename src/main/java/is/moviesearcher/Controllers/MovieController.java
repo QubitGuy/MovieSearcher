@@ -1,9 +1,7 @@
 package is.moviesearcher.Controllers;
 
-import is.moviesearcher.Persistence.IMDbMovie;
-import is.moviesearcher.Persistence.MDAMovie;
-import is.moviesearcher.Service.IMDbMovieService;
-import is.moviesearcher.Service.MDAMovieService;
+import is.moviesearcher.Persistence.NetflixMovie;
+import is.moviesearcher.Service.NetflixMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,23 +13,32 @@ import java.util.List;
 @Controller
 public class MovieController {
 
-    private final MDAMovieService MDAMovieService;
 
+    /*
+    private final MDAMovieService MDAMovieService;
 
     @Autowired
     public MovieController(MDAMovieService MDAMovieService) {
         this.MDAMovieService = MDAMovieService;
     }
-
-    //private final IMDbMovieService IMDbMovieService;
+     */
 
     /*
+    private final IMDbMovieService IMDbMovieService;
+
     @Autowired
     public MovieController(is.moviesearcher.Service.IMDbMovieService imDbMovieService) {
         this.IMDbMovieService = imDbMovieService;
     }
-
      */
+
+    private final NetflixMovieService netflixMovieService;
+
+    @Autowired
+    public MovieController(NetflixMovieService netflixMovieService) {
+        this.netflixMovieService = netflixMovieService;
+    }
+
 
     @RequestMapping("/")
     public String Home(){
@@ -44,12 +51,18 @@ public class MovieController {
                                                String query, Model model) {
         try {
 
+            /*
             List<MDAMovie> MDAMovie = MDAMovieService.getMDAMovieByTitle(query);
-
-            // List<IMDbMovie> IMDbMovie = IMDbMovieService.getIMDbMovieByID(query);
-
             model.addAttribute("movies", MDAMovie);
-            //model.addAttribute("movies", IMDbMovie);
+             */
+
+            /*
+            List<IMDbMovie> IMDbMovie = IMDbMovieService.getIMDbMovieByID(query);
+            model.addAttribute("movies", IMDbMovie);
+             */
+
+            List<NetflixMovie> netflixMovies = netflixMovieService.getNetflixMovieByTitle(query);
+            model.addAttribute("movies", netflixMovies);
 
         } catch (Exception e) {
             e.printStackTrace();

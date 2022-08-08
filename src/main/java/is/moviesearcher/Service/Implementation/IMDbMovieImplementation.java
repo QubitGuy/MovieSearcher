@@ -41,7 +41,7 @@ public class IMDbMovieImplementation implements IMDbMovieService {
                     .asJson();
 
             int responseStatus = httpResponse.getStatus();
-            System.out.println("HTTP Response Code: " + responseStatus);
+            System.out.println("\n" + "HTTP Response Code: " + responseStatus);
 
             JSONParser parser = new JSONParser();
             JSONObject jsonObjectQuery = (JSONObject) parser.parse(httpResponse.getBody().toString());;
