@@ -23,7 +23,7 @@ public class NetflixMovieImplementation implements NetflixMovieService {
 
     private final List<NetflixMovie> netflixMovieRepoTemp = new ArrayList<>();
 
-    private List<NetflixMovie> netflixMovieRepoFinal = new ArrayList<>();
+    private final List<NetflixMovie> netflixMovieRepoFinal = new ArrayList<>();
 
     private final static String HOST = "https://unogs-unogs-v1.p.rapidapi.com/search/titles?order_by=title&title=";
     private final static String X_RAPIDAPI_KEY = "d9e00b2fc7msh738d1b591013f04p12ca9cjsn02836d7eb9d1";
@@ -64,61 +64,33 @@ public class NetflixMovieImplementation implements NetflixMovieService {
 
                     JSONObject search = (JSONObject) jsonArray.get(i);
 
-                    netflixMovieRepo.add(new NetflixMovie(
-                            (String) search.get("title"),
-                            (String) search.get("title_type"),
-                            (Long) search.get("netflix_id"),
-                            (String) search.get("synopsis"),
-                            (String) search.get("imdb_id"),
-                            (String) search.get("poster"),
-                            (String) search.get("title_date")
-                    ));
+                    String title = (String) search.get("title");
+                    title = title.toLowerCase();
 
-                    if (netflixMovieRepo.get(i).getPoster().isEmpty()) {
-                        netflixMovieRepo.get(i).setPoster("/images/no-poster-found.jpg");
+                    String sQ = query.toLowerCase();
+
+                    List<String> netflixCountry;
+                    boolean exists = title.contains(sQ);
+
+                    int matchCounter = 0;
+                    if (exists) {
+                        long id = (Long) search.get("netflix_id");
+                        netflixCountry = netflixMovieCountryByID(id);
+
+                        netflixMovieRepo.add(new NetflixMovie(
+                                (String) search.get("title"),
+                                (Long) search.get("netflix_id"),
+                                (String) search.get("synopsis"),
+                                (String) search.get("poster"),
+                                netflixCountry
+                        ));
+
+                        if (netflixMovieRepo.get(matchCounter).getPoster().isEmpty()) {
+                            netflixMovieRepo.get(matchCounter).setPoster("/images/no-poster-found.jpg");
+                        }
+                        matchCounter++;
+                        System.out.println("Title of film that got a positive match: " + search.get("title"));
                     }
-                }
-            }
-
-            netflixMovieRepoTemp.clear();
-            for (int i = 0; i < netflixMovieRepo.size(); i++) {
-
-
-                String title = netflixMovieRepo.get(i).getTitle();
-                title = title.toLowerCase();
-
-                String sQ = query.toLowerCase();
-
-                boolean exists = title.contains(sQ);
-
-                if (exists) {
-                    netflixMovieRepoTemp.add(netflixMovieRepo.get(i));
-                    System.out.println("Contains method works");
-                    System.out.println("Movie title = " + netflixMovieRepo.get(i).getTitle());
-
-                }
-
-                /*
-                Pattern pattern = Pattern.compile(query, Pattern.CASE_INSENSITIVE);
-                Matcher matcher = pattern.matcher(title);
-
-                boolean matchFound = matcher.find();
-                if (matchFound) System.out.println("Pattern-matcher works!");
-                 */
-
-
-                netflixMovieRepoFinal.clear();
-                for (int j = 0; j < netflixMovieRepoTemp.size(); j++) {
-                    long id = netflixMovieRepoTemp.get(j).getNetflix_id();
-                    List<String> netflixCountries = netflixMovieCountryByID(id);
-
-                    netflixMovieRepoFinal.add(new NetflixMovie(
-                            netflixMovieRepoTemp.get(j).getTitle(),
-                            netflixMovieRepoTemp.get(j).getNetflix_id(),
-                            netflixMovieRepoTemp.get(j).getSynopsis(),
-                            netflixMovieRepoTemp.get(j).getPoster(),
-                            netflixCountries)
-                    );
                 }
             }
 
@@ -126,7 +98,7 @@ public class NetflixMovieImplementation implements NetflixMovieService {
             e.printStackTrace();
         }
 
-        return netflixMovieRepoFinal;
+        return netflixMovieRepo;
     }
 
     @Override
