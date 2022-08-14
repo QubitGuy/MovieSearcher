@@ -23,6 +23,8 @@ public class NetflixMovieImplementation implements NetflixMovieService {
 
     private final List<NetflixMovie> netflixMovieRepoTemp = new ArrayList<>();
 
+    private List<NetflixMovie> netflixMovieRepoFinal = new ArrayList<>();
+
     private final static String HOST = "https://unogs-unogs-v1.p.rapidapi.com/search/titles?order_by=title&title=";
     private final static String X_RAPIDAPI_KEY = "d9e00b2fc7msh738d1b591013f04p12ca9cjsn02836d7eb9d1";
     private final String X_RAPIDAPI_HOST = "unogs-unogs-v1.p.rapidapi.com";
@@ -96,32 +98,21 @@ public class NetflixMovieImplementation implements NetflixMovieService {
 
                 }
 
+                /*
                 Pattern pattern = Pattern.compile(query, Pattern.CASE_INSENSITIVE);
                 Matcher matcher = pattern.matcher(title);
 
                 boolean matchFound = matcher.find();
                 if (matchFound) System.out.println("Pattern-matcher works!");
-
-                /*
-                HttpResponse<String> response = Unirest.get("https://unogs-unogs-v1.p.rapidapi.com/title/countries?netflix_id=70136120")
-                .header("X-RapidAPI-Key", "d9e00b2fc7msh738d1b591013f04p12ca9cjsn02836d7eb9d1")
-                .header("X-RapidAPI-Host", "unogs-unogs-v1.p.rapidapi.com")
-                .asString();
                  */
 
+
+                netflixMovieRepoFinal.clear();
                 for (int j = 0; j < netflixMovieRepoTemp.size(); j++) {
                     long id = netflixMovieRepoTemp.get(j).getNetflix_id();
                     List<String> netflixCountries = netflixMovieCountryByID(id);
-                    netflixMovieRepo.clear();
-                    /*
-                    this.title = title;
-                    this.netflix_id = netflix_id;
-                    this.synopsis = synopsis;
-                    this.poster = poster;
-                    this.country = country;
-                     */
 
-                    netflixMovieRepo.add(new NetflixMovie(
+                    netflixMovieRepoFinal.add(new NetflixMovie(
                             netflixMovieRepoTemp.get(j).getTitle(),
                             netflixMovieRepoTemp.get(j).getNetflix_id(),
                             netflixMovieRepoTemp.get(j).getSynopsis(),
@@ -129,14 +120,13 @@ public class NetflixMovieImplementation implements NetflixMovieService {
                             netflixCountries)
                     );
                 }
-
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return netflixMovieRepo;
+        return netflixMovieRepoFinal;
     }
 
     @Override
