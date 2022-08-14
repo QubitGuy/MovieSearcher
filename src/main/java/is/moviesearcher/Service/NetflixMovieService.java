@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface NetflixMovieService {
     List<NetflixMovie> getNetflixMovieByTitle(String title);
+
+    List<String> netflixMovieCountryByID(long id);
 }

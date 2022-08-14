@@ -2,6 +2,9 @@ package is.moviesearcher.Persistence;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @JsonIgnoreProperties
 public class NetflixMovie {
     private String title;
@@ -11,8 +14,10 @@ public class NetflixMovie {
     private String imdb_id;
     private String poster;
     private String title_date;
+    private List<String> country;
 
-    public NetflixMovie(String title, String title_type, Long netflix_id, String synopsis, String imdb_id, String poster, String title_date) {
+    public NetflixMovie(String title, String title_type, Long netflix_id,
+                        String synopsis, String imdb_id, String poster, String title_date) {
         this.title = title;
         this.title_type = title_type;
         this.netflix_id = netflix_id;
@@ -20,6 +25,15 @@ public class NetflixMovie {
         this.imdb_id = imdb_id;
         this.poster = poster;
         this.title_date = title_date;
+    }
+
+    public NetflixMovie(String title, Long netflix_id, String synopsis,
+                        String poster, List<String> country) {
+        this.title = title;
+        this.netflix_id = netflix_id;
+        this.synopsis = synopsis;
+        this.poster = poster;
+        this.country = country;
     }
 
     public NetflixMovie() {
@@ -79,6 +93,14 @@ public class NetflixMovie {
 
     public void setTitle_date(String title_date) {
         this.title_date = title_date;
+    }
+
+    public List<String> getCountry() {
+        return country;
+    }
+
+    public void setCountry(List<String> country) {
+        this.country = country;
     }
 
     @Override

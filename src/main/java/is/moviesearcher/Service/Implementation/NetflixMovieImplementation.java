@@ -102,6 +102,33 @@ public class NetflixMovieImplementation implements NetflixMovieService {
                 boolean matchFound = matcher.find();
                 if (matchFound) System.out.println("Pattern-matcher works!");
 
+                /*
+                HttpResponse<String> response = Unirest.get("https://unogs-unogs-v1.p.rapidapi.com/title/countries?netflix_id=70136120")
+                .header("X-RapidAPI-Key", "d9e00b2fc7msh738d1b591013f04p12ca9cjsn02836d7eb9d1")
+                .header("X-RapidAPI-Host", "unogs-unogs-v1.p.rapidapi.com")
+                .asString();
+                 */
+
+                for (int j = 0; j < netflixMovieRepoTemp.size(); j++) {
+                    long id = netflixMovieRepoTemp.get(j).getNetflix_id();
+                    List<String> netflixCountries = netflixMovieCountryByID(id);
+                    netflixMovieRepo.clear();
+                    /*
+                    this.title = title;
+                    this.netflix_id = netflix_id;
+                    this.synopsis = synopsis;
+                    this.poster = poster;
+                    this.country = country;
+                     */
+
+                    netflixMovieRepo.add(new NetflixMovie(
+                            netflixMovieRepoTemp.get(j).getTitle(),
+                            netflixMovieRepoTemp.get(j).getNetflix_id(),
+                            netflixMovieRepoTemp.get(j).getSynopsis(),
+                            netflixMovieRepoTemp.get(j).getPoster(),
+                            netflixCountries)
+                    );
+                }
 
             }
 
@@ -109,9 +136,40 @@ public class NetflixMovieImplementation implements NetflixMovieService {
             e.printStackTrace();
         }
 
+        return netflixMovieRepo;
+    }
+
+    @Override
+    public List<String> netflixMovieCountryByID(long id) {
+
+        List<String> netflixCountryName = new ArrayList<>();
+        try {
+            HttpResponse<JsonNode> httpResponse = Unirest.get("https://unogs-unogs-v1.p.rapidapi.com/title/countries?netflix_id=" + id)
+                    .header("X-RapidAPI-Key", X_RAPIDAPI_KEY)
+                    .header("X-RapidAPI-Host", X_RAPIDAPI_HOST)
+                    .asJson();
+
+            int responseStatus = httpResponse.getStatus();
+            // System.out.println("\nHTTP Response Code | Netflix Country Side: " + responseStatus);
+
+            JSONParser parser = new JSONParser();
+            JSONObject jsonObjectQuery = (JSONObject) parser.parse(httpResponse.getBody().toString());
+
+            JSONArray jsonArray = (JSONArray) jsonObjectQuery.get("results");
+
+            for (int i = 0; i < jsonArray.size(); i++) {
+
+                JSONObject search = (JSONObject) jsonArray.get(i);
+                netflixCountryName.add((String) search.get("country"));
+            }
 
 
-        return netflixMovieRepoTemp;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return netflixCountryName;
     }
 
 

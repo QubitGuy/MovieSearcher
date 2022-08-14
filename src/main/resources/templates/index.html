@@ -17,12 +17,12 @@
         </div>
     </div>
 </nav>
-
 <div class="grid">
+    <!-- <p class="content-text" th:if="${movie.title == 'Film not found'}" th:text="${movie.title}">This is a title</p> -->
     <div class="col" th:each="movie : ${movies}">
-        <p class="content-text" th:text="${movie.title}">This is a title</p>
+        <p class="content-text" th:if="${movie.title != ''}" th:text="${movie.title}">Film not found</p>
         <img class="content-image" data-tool-tip="" th:if="${movie.poster != ''}" th:src="@{${movie.poster}}"/>
-        <p class="content-text" th:if="${movie.synopsis != ''}" th:text="${movie.synopsis}">This is a title below an image</p>
+        <p class="content-text" th:if="${movie.country != ''}" th:text="${movie.country}">This is a title below an image</p>
     </div>
 
 </div>

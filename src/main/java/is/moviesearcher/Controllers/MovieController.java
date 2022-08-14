@@ -70,7 +70,12 @@ public class MovieController {
 
             List<NetflixMovie> netflixMovies = netflixMovieService.getNetflixMovieByTitle(query);
 
-
+            /*
+            if (netflixMovies.isEmpty()) {
+                netflixMovies.add(new NetflixMovie("Film not found", "", null, "", "", "", ""));
+                model.addAttribute("movies", netflixMovies);
+            }
+             */
 
             model.addAttribute("movies", netflixMovies);
 
