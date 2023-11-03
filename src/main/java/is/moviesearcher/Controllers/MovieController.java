@@ -69,6 +69,9 @@ public class MovieController {
 
 
             List<NetflixMovie> netflixMovies = netflixMovieService.getNetflixMovieByTitle(query);
+            for (int i = 0; i < netflixMovies.size(); i++) {
+                netflixMovies.get(i).setTitle(netflixMovies.get(i).getTitle() + " - Netflix");
+            }
 
             /*
             if (netflixMovies.isEmpty()) {
