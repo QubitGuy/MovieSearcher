@@ -17,25 +17,6 @@ import java.util.regex.Pattern;
 @Controller
 public class MovieController {
 
-
-    /*
-    private final MDAMovieService MDAMovieService;
-
-    @Autowired
-    public MovieController(MDAMovieService MDAMovieService) {
-        this.MDAMovieService = MDAMovieService;
-    }
-     */
-
-    /*
-    private final IMDbMovieService IMDbMovieService;
-
-    @Autowired
-    public MovieController(is.moviesearcher.Service.IMDbMovieService imDbMovieService) {
-        this.IMDbMovieService = imDbMovieService;
-    }
-     */
-
     private final NetflixMovieService netflixMovieService;
 
     @Autowired
@@ -55,30 +36,10 @@ public class MovieController {
                                                String query, Model model) {
         try {
 
-
-
-            /*
-            List<MDAMovie> MDAMovie = MDAMovieService.getMDAMovieByTitle(query);
-            model.addAttribute("movies", MDAMovie);
-             */
-
-            /*
-            List<IMDbMovie> IMDbMovie = IMDbMovieService.getIMDbMovieByID(query);
-            model.addAttribute("movies", IMDbMovie);
-             */
-
-
             List<NetflixMovie> netflixMovies = netflixMovieService.getNetflixMovieByTitle(query);
             for (int i = 0; i < netflixMovies.size(); i++) {
                 netflixMovies.get(i).setTitle(netflixMovies.get(i).getTitle() + " - Netflix");
             }
-
-            /*
-            if (netflixMovies.isEmpty()) {
-                netflixMovies.add(new NetflixMovie("Film not found", "", null, "", "", "", ""));
-                model.addAttribute("movies", netflixMovies);
-            }
-             */
 
             model.addAttribute("movies", netflixMovies);
 
